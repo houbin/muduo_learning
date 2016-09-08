@@ -27,3 +27,5 @@
 *.out
 *.app
 a.out
+
+inventory_thread_deadlock

@@ -1,3 +1,5 @@
+#ifndef MUTEX_H_
+#define MUTEX_H_
 #include <string.h>
 #include <pthread.h>
 
@@ -7,7 +9,9 @@ public:
     Mutex(const char *name)
     {
         strncpy(name_, name, strlen(name));
-        pthread_mutex_init(&m_, NULL);
+		pthread_mutexattr_init(&attr_);
+		pthread_mutexattr_settype(&attr_, PTHREAD_MUTEX_NORMAL);
+        pthread_mutex_init(&m_, &attr_);
     }
 
     ~Mutex()
@@ -24,6 +28,8 @@ public:
     {
         pthread_mutex_unlock(&m_);
     }
+
+	friend class Cond;
 
     class Locker
     {
@@ -45,5 +51,8 @@ public:
 private:
     char name_[64];
     pthread_mutex_t m_;
+	pthread_mutexattr_t attr_;
 };
+
+#endif
 
